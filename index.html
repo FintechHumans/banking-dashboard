@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kosovo Banking System — Market Share Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="dashboard-header">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="logo-block">
+                    <span class="logo-icon">NLB</span>
+                    <div class="logo-text">
+                        <h1>Kosovo Banking System</h1>
+                        <p>Market Share Intelligence Dashboard</p>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-meta">
+                    <span class="meta-label">Latest Data</span>
+                    <span class="meta-value" id="latestDate">February 2026</span>
+                </div>
+                <div class="header-meta">
+                    <span class="meta-label">Data Source</span>
+                    <span class="meta-value">KBA (Kosovo Banking Association) — Public Data</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGATION -->
+    <nav class="section-nav">
+        <div class="nav-inner">
+            <button class="nav-btn active" data-section="overview">Executive Overview</button>
+            <button class="nav-btn" data-section="trends">Market Trends</button>
+            <button class="nav-btn" data-section="competitive">Competitive Positioning</button>
+            <button class="nav-btn compare-btn" data-section="comparison">Bank vs Bank</button>
+            <button class="nav-btn" data-section="segments">Segment Breakdown</button>
+            <button class="nav-btn" data-section="growth">Growth Drivers</button>
+            <button class="nav-btn" data-section="insights">Strategic Insights</button>
+        </div>
+    </nav>
+
+    <!-- GLOBAL FILTERS -->
+    <div class="filters-bar">
+        <div class="filters-inner">
+            <div class="filter-group">
+                <label>Category</label>
+                <select id="filterCategory">
+                    <option value="Assets">Total Assets</option>
+                    <option value="Gross Loans">Gross Loans</option>
+                    <option value="Corporate Loans">Corporate Loans</option>
+                    <option value="Retail Loans">Retail Loans</option>
+                    <option value="Housing Loans">Housing Loans</option>
+                    <option value="Consumer Loans">Consumer Loans</option>
+                    <option value="Total Deposits">Total Deposits</option>
+                    <option value="Deposits from Corporate">Corporate Deposits</option>
+                    <option value="Deposits from Retail">Retail Deposits</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Period</label>
+                <select id="filterPeriod"></select>
+            </div>
+            <div class="filter-group">
+                <label>Top N Banks</label>
+                <select id="filterTopN">
+                    <option value="5">Top 5</option>
+                    <option value="7">Top 7</option>
+                    <option value="10" selected>All Banks</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 1: EXECUTIVE OVERVIEW -->
+    <section class="dashboard-section active" id="sec-overview">
+        <div class="section-header">
+            <h2>Executive Overview</h2>
+            <p class="section-subtitle" id="overviewSubtitle">Kosovo Banking System — Total Assets at February 2026</p>
+        </div>
+
+        <!-- KPI Row -->
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <span class="kpi-label">Total Market Size</span>
+                <span class="kpi-value" id="kpiMarketSize">—</span>
+                <span class="kpi-unit">k EUR</span>
+            </div>
+            <div class="kpi-card highlight">
+                <span class="kpi-label">NLB Value</span>
+                <span class="kpi-value" id="kpiNlbValue">—</span>
+                <span class="kpi-unit">k EUR</span>
+            </div>
+            <div class="kpi-card highlight">
+                <span class="kpi-label">NLB Market Share</span>
+                <span class="kpi-value" id="kpiNlbShare">—</span>
+                <span class="kpi-unit">%</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Share Change (QoQ)</span>
+                <span class="kpi-value" id="kpiShareChange">—</span>
+                <span class="kpi-unit">pp</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">NLB Rank</span>
+                <span class="kpi-value" id="kpiNlbRank">—</span>
+                <span class="kpi-unit" id="kpiRankChange"></span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Gap to Leader</span>
+                <span class="kpi-value" id="kpiGapLeader">—</span>
+                <span class="kpi-unit">pp</span>
+            </div>
+        </div>
+
+        <!-- Executive Insight Box -->
+        <div class="insight-box" id="overviewInsight">
+            <div class="insight-icon">&#9672;</div>
+            <p id="overviewInsightText">Loading insights...</p>
+        </div>
+
+        <!-- Overview Charts Row -->
+        <div class="chart-row two-col">
+            <div class="chart-card">
+                <h3>Market Share Distribution</h3>
+                <p class="chart-subtitle" id="pieSubtitle">Latest Period</p>
+                <div id="chartPie" class="chart-container"></div>
+            </div>
+            <div class="chart-card">
+                <h3>NLB Market Share Trend</h3>
+                <p class="chart-subtitle">Historical Evolution</p>
+                <div id="chartNlbTrend" class="chart-container"></div>
+            </div>
+        </div>
+
+        <!-- Ranking Table -->
+        <div class="chart-card full-width">
+            <h3>Bank Rankings — <span id="rankingTitle">Total Assets</span></h3>
+            <p class="chart-subtitle">Sorted by market share, latest period</p>
+            <div class="table-wrapper">
+                <table class="ranking-table" id="rankingTable">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Bank</th>
+                            <th>Value (k EUR)</th>
+                            <th>Market Share</th>
+                            <th>Share Change</th>
+                            <th>Share Bar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankingBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: MARKET TRENDS -->
+    <section class="dashboard-section" id="sec-trends">
+        <div class="section-header">
+            <h2>Market Share Trends</h2>
+            <p class="section-subtitle">Evolution of market share across time for all banks</p>
+        </div>
+
+        <div class="chart-card full-width">
+            <h3>Market Share Evolution — All Banks</h3>
+            <p class="chart-subtitle">Quarterly / Monthly trend line chart</p>
+            <div id="chartTrendAll" class="chart-container chart-tall"></div>
+        </div>
+
+        <div class="chart-row two-col">
+            <div class="chart-card">
+                <h3>Total Market Size Evolution</h3>
+                <p class="chart-subtitle">Aggregate banking sector value (k EUR)</p>
+                <div id="chartMarketSize" class="chart-container"></div>
+            </div>
+            <div class="chart-card">
+                <h3>NLB vs Top 3 Competitors</h3>
+                <p class="chart-subtitle">Market share comparison over time</p>
+                <div id="chartNlbVsTop3" class="chart-container"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: COMPETITIVE POSITIONING -->
+    <section class="dashboard-section" id="sec-competitive">
+        <div class="section-header">
+            <h2>Competitive Positioning</h2>
+            <p class="section-subtitle">Peer comparison and competitive gap analysis</p>
+        </div>
+
+        <div class="chart-row two-col">
+            <div class="chart-card">
+                <h3>Market Share Ranking</h3>
+                <p class="chart-subtitle">Horizontal bar chart — latest period</p>
+                <div id="chartBarRanking" class="chart-container chart-tall"></div>
+            </div>
+            <div class="chart-card">
+                <h3>Share Change vs Previous Quarter</h3>
+                <p class="chart-subtitle">Winners and Losers</p>
+                <div id="chartShareChange" class="chart-container chart-tall"></div>
+            </div>
+        </div>
+
+        <div class="chart-card full-width">
+            <h3>Competitive Heatmap — Market Share by Segment</h3>
+            <p class="chart-subtitle">Which bank leads in which product category</p>
+            <div id="chartHeatmap" class="chart-container chart-tall"></div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: BANK VS BANK COMPARISON -->
+    <section class="dashboard-section" id="sec-comparison">
+        <div class="section-header">
+            <h2>Bank vs Bank Comparison</h2>
+            <p class="section-subtitle">Select two banks for a detailed head-to-head analysis</p>
+        </div>
+
+        <!-- Comparison Selectors -->
+        <div class="comparison-selectors">
+            <div class="selector-card bank-a-card">
+                <label>Bank A</label>
+                <select id="compareA">
+                    <option value="NLB" selected>NLB Bank</option>
+                </select>
+            </div>
+            <div class="vs-badge">VS</div>
+            <div class="selector-card bank-b-card">
+                <label>Bank B</label>
+                <select id="compareB">
+                    <option value="RBKO">RBKO</option>
+                </select>
+            </div>
+            <div class="quick-compare-btns">
+                <button class="quick-btn" onclick="quickCompare('RBKO')">vs RBKO</button>
+                <button class="quick-btn" onclick="quickCompare('BKT')">vs BKT</button>
+                <button class="quick-btn" onclick="quickCompare('PCB')">vs PCB</button>
+                <button class="quick-btn" onclick="quickCompare('TEB')">vs TEB</button>
+            </div>
+        </div>
+
+        <!-- Comparison KPIs -->
+        <div class="compare-kpi-row" id="compareKpis"></div>
+
+        <!-- Comparison Summary -->
+        <div class="insight-box compare-insight" id="compareSummary">
+            <div class="insight-icon">&#9672;</div>
+            <p id="compareSummaryText">Select two banks to see head-to-head analysis.</p>
+        </div>
+
+        <!-- Comparison Charts -->
+        <div class="chart-row two-col">
+            <div class="chart-card">
+                <h3>Market Share Trend — Head to Head</h3>
+                <p class="chart-subtitle">Time series comparison</p>
+                <div id="chartCompareTrend" class="chart-container"></div>
+            </div>
+            <div class="chart-card">
+                <h3>Value Comparison — Latest Period</h3>
+                <p class="chart-subtitle">Side-by-side bar chart</p>
+                <div id="chartCompareBar" class="chart-container"></div>
+            </div>
+        </div>
+
+        <div class="chart-row two-col">
+            <div class="chart-card">
+                <h3>Segment Share Comparison</h3>
+                <p class="chart-subtitle">Market share across all product categories</p>
+                <div id="chartCompareSegments" class="chart-container"></div>
+            </div>
+            <div class="chart-card">
+                <h3>Gap Analysis Over Time</h3>
+                <p class="chart-subtitle">Market share gap (A minus B) evolution</p>
+                <div id="chartCompareGap" class="chart-container"></div>
+            </div>
+        </div>
+
+        <!-- Comparison Detail Table -->
+        <div class="chart-card full-width">
+            <h3>Detailed Comparison Table</h3>
+            <p class="chart-subtitle">Full metric breakdown with leader indicators</p>
+            <div class="table-wrapper">
+                <table class="ranking-table compare-table" id="compareTable">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th id="thBankA">Bank A</th>
+                            <th id="thBankB">Bank B</th>
+                            <th>Gap</th>
+                            <th>Leader</th>
+                        </tr>
+                    </thead>
+                    <tbody id="compareBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: SEGMENT BREAKDOWN -->
+    <section class="dashboard-section" id="sec-segments">
+        <div class="section-header">
+            <h2>Product / Segment Breakdown</h2>
+            <p class="section-subtitle">NLB performance across key banking segments</p>
+        </div>
+
+        <div class="chart-card full-width">
+            <h3>NLB Market Share by Segment</h3>
+            <p class="chart-subtitle">Strengths and weaknesses across product categories</p>
+            <div id="chartSegmentBar" class="chart-container chart-tall"></div>
+        </div>
+
+        <div class="chart-row two-col">
+            <div class="chart-card">
+                <h3>Segment Value — NLB vs Market</h3>
+                <p class="chart-subtitle">NLB contribution to each segment</p>
+                <div id="chartSegmentStack" class="chart-container"></div>
+            </div>
+            <div class="chart-card">
+                <h3>NLB Rank by Segment</h3>
+                <p class="chart-subtitle">Competitive position across categories</p>
+                <div id="chartSegmentRank" class="chart-container"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: GROWTH DRIVERS -->
+    <section class="dashboard-section" id="sec-growth">
+        <div class="section-header">
+            <h2>Growth Drivers</h2>
+            <p class="section-subtitle">Which banks are growing fastest and contributing most to market expansion</p>
+        </div>
+
+        <div class="chart-row two-col">
+            <div class="chart-card">
+                <h3>Growth Rate by Bank</h3>
+                <p class="chart-subtitle">Quarterly growth — latest period</p>
+                <div id="chartGrowthRate" class="chart-container chart-tall"></div>
+            </div>
+            <div class="chart-card">
+                <h3>Absolute Growth Contribution</h3>
+                <p class="chart-subtitle">Value change contribution to market (k EUR)</p>
+                <div id="chartGrowthContrib" class="chart-container chart-tall"></div>
+            </div>
+        </div>
+
+        <div class="insight-box" id="growthInsight">
+            <div class="insight-icon">&#9672;</div>
+            <p id="growthInsightText">Loading growth insights...</p>
+        </div>
+    </section>
+
+    <!-- SECTION 7: STRATEGIC INSIGHTS -->
+    <section class="dashboard-section" id="sec-insights">
+        <div class="section-header">
+            <h2>Strategic Insights</h2>
+            <p class="section-subtitle">Board-level commentary and strategic implications for NLB</p>
+        </div>
+
+        <div class="insights-grid">
+            <div class="insight-card">
+                <div class="insight-card-header">Market Position</div>
+                <p id="insightPosition">Loading...</p>
+            </div>
+            <div class="insight-card">
+                <div class="insight-card-header">Growth Trajectory</div>
+                <p id="insightGrowth">Loading...</p>
+            </div>
+            <div class="insight-card">
+                <div class="insight-card-header">Competitive Threats</div>
+                <p id="insightThreats">Loading...</p>
+            </div>
+            <div class="insight-card">
+                <div class="insight-card-header">Strategic Opportunities</div>
+                <p id="insightOpportunities">Loading...</p>
+            </div>
+            <div class="insight-card">
+                <div class="insight-card-header">Deposit Franchise</div>
+                <p id="insightDeposits">Loading...</p>
+            </div>
+            <div class="insight-card">
+                <div class="insight-card-header">Lending Position</div>
+                <p id="insightLending">Loading...</p>
+            </div>
+        </div>
+
+        <!-- Concentration Analysis -->
+        <div class="chart-card full-width">
+            <h3>Market Concentration — Top 3 vs Rest</h3>
+            <p class="chart-subtitle">Share of market held by the three largest banks over time</p>
+            <div id="chartConcentration" class="chart-container"></div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="dashboard-footer">
+        <p>Kosovo Banking System Market Share Dashboard &mdash; Confidential &mdash; Prepared for NLB Management</p>
+        <p class="footer-note">Data sourced from KBA (Kosovo Banking Association) — public data, curated by <a href="https://github.com/FintechHumans/ai-presentation-web" target="_blank" style="color:#230078;">FintechHumans</a>. Values in thousands of EUR. Market share calculated as bank value / total banking sector value.</p>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
