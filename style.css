@@ -569,6 +569,15 @@ body {
 .apexcharts-legend-text { font-family: var(--font) !important; font-size: 0.78rem !important; }
 .apexcharts-title-text { font-family: var(--font) !important; }
 
+/* --- DOWNLOAD BUTTONS --- */
+.card-header-row { display: flex; justify-content: space-between; align-items: center; }
+.download-btn {
+    background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);
+    font-size: 0.75rem; font-weight: 600; padding: 4px 12px; border-radius: 6px;
+    cursor: pointer; transition: all 0.2s; font-family: var(--font);
+}
+.download-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
 /* --- PROFITABILITY SECTION --- */
 .nlb-col { background: rgba(35, 0, 120, 0.04); font-weight: 600; }
 .pl-bold-row td { font-weight: 700; border-top: 2px solid var(--primary); }

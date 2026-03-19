@@ -80,9 +80,37 @@ function renderChart(id, options) {
     const el = document.getElementById(id);
     if (!el) return;
     el.innerHTML = '';
+    // Enable download toolbar on all charts
+    if (!options.chart) options.chart = {};
+    options.chart.toolbar = {
+        show: true,
+        tools: { download: true, selection: false, zoom: false, zoomin: false, zoomout: false, pan: false, reset: false },
+        export: {
+            png: { filename: 'KBS_' + id },
+            svg: { filename: 'KBS_' + id }
+        }
+    };
     const chart = new ApexCharts(el, options);
     chart.render();
     CHART_INSTANCES[id] = chart;
+}
+
+function downloadTableAsImage(tableId, filename) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+    const card = table.closest('.chart-card');
+    if (!card) return;
+    html2canvas(card, {
+        backgroundColor: '#ffffff',
+        scale: 2,
+        logging: false,
+        useCORS: true
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = (filename || tableId) + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    });
 }
 
 // --- INITIALIZATION ---

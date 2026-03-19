@@ -6,6 +6,7 @@
     <title>Kosovo Banking System — Market Share Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -144,7 +145,7 @@
 
         <!-- Ranking Table -->
         <div class="chart-card full-width">
-            <h3>Bank Rankings — <span id="rankingTitle">Total Assets</span></h3>
+            <div class="card-header-row"><h3>Bank Rankings — <span id="rankingTitle">Total Assets</span></h3><button class="download-btn" onclick="downloadTableAsImage('rankingTable','Bank_Rankings')">&#8681; PNG</button></div>
             <p class="chart-subtitle">Sorted by market share, latest period</p>
             <div class="table-wrapper">
                 <table class="ranking-table" id="rankingTable">
@@ -286,7 +287,7 @@
 
         <!-- Comparison Detail Table -->
         <div class="chart-card full-width">
-            <h3>Detailed Comparison Table</h3>
+            <div class="card-header-row"><h3>Detailed Comparison Table</h3><button class="download-btn" onclick="downloadTableAsImage('compareTable','Bank_Comparison')">&#8681; PNG</button></div>
             <p class="chart-subtitle">Full metric breakdown with leader indicators</p>
             <div class="table-wrapper">
                 <table class="ranking-table compare-table" id="compareTable">
@@ -449,7 +450,7 @@
 
         <!-- P&L Full Table -->
         <div class="chart-card full-width">
-            <h3>Full P&L Breakdown — All Banks</h3>
+            <div class="card-header-row"><h3>Full P&L Breakdown — All Banks</h3><button class="download-btn" onclick="downloadTableAsImage('plTable','PL_Breakdown')">&#8681; PNG</button></div>
             <p class="chart-subtitle">Income statement for the period ended Feb 2026 (k EUR)</p>
             <div class="table-wrapper">
                 <table class="ranking-table" id="plTable">
@@ -461,7 +462,7 @@
 
         <!-- Ratios Table -->
         <div class="chart-card full-width">
-            <h3>Key Performance Ratios — All Banks</h3>
+            <div class="card-header-row"><h3>Key Performance Ratios — All Banks</h3><button class="download-btn" onclick="downloadTableAsImage('ratiosTable','Key_Ratios')">&#8681; PNG</button></div>
             <p class="chart-subtitle">CAR, NPL, Coverage, ROA, ROE, CIR, LCR</p>
             <div class="table-wrapper">
                 <table class="ranking-table" id="ratiosTable">
