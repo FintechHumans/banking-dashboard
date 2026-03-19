@@ -27,6 +27,12 @@ function fmt(v, decimals = 1) {
     if (Math.abs(v) >= 1e3) return (v / 1e3).toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + 'M';
     return commaFmt(v, decimals);
 }
+function fmtUnit(v) {
+    if (v == null || isNaN(v)) return 'k EUR';
+    if (Math.abs(v) >= 1e6) return 'B EUR';
+    if (Math.abs(v) >= 1e3) return 'M EUR';
+    return 'k EUR';
+}
 function fmtK(v) {
     if (v == null) return '—';
     return Math.round(v).toLocaleString('en-US');
@@ -166,7 +172,9 @@ function updateDashboard() {
     const gapToLeader = (nlbShare != null && leaderShare != null) ? nlbShare - leaderShare : null;
 
     document.getElementById('kpiMarketSize').textContent = fmt(totalVal);
+    document.getElementById('kpiMarketUnit').textContent = fmtUnit(totalVal);
     document.getElementById('kpiNlbValue').textContent = fmt(nlbVal);
+    document.getElementById('kpiNlbUnit').textContent = fmtUnit(nlbVal);
     document.getElementById('kpiNlbShare').textContent = nlbShare != null ? nlbShare.toFixed(2) : '—';
 
     const scEl = document.getElementById('kpiShareChange');
@@ -758,8 +766,10 @@ function updateGrowth() {
             const b = growthData[dataPointIndex]?.bank;
             return b === 'NLB' ? NLB_COLOR : (value >= 0 ? '#0d8a56' : '#c0392b');
         }],
-        plotOptions: { bar: { horizontal: true, barHeight: '55%', borderRadius: 3, distributed: true } },
-        dataLabels: { enabled: true, formatter: v => v.toFixed(1) + '%', offsetX: 5,
+        plotOptions: { bar: { horizontal: true, barHeight: '55%', borderRadius: 3, distributed: true,
+            dataLabels: { position: 'top' }
+        } },
+        dataLabels: { enabled: true, formatter: v => (v > 0 ? '+' : '') + v.toFixed(1) + '%', offsetX: 30,
             style: { fontSize: '11px', fontWeight: 600, colors: ['#333'] }
         },
         xaxis: { labels: { formatter: v => v.toFixed(1) + '%', style: { fontSize: '11px' } } },
@@ -778,8 +788,10 @@ function updateGrowth() {
             const b = contribData[dataPointIndex]?.bank;
             return b === 'NLB' ? NLB_COLOR : (contribData[dataPointIndex]?.absChange >= 0 ? '#6b7280' : '#c0392b');
         }],
-        plotOptions: { bar: { horizontal: true, barHeight: '55%', borderRadius: 3, distributed: true } },
-        dataLabels: { enabled: true, formatter: v => fmtK(v), offsetX: 5,
+        plotOptions: { bar: { horizontal: true, barHeight: '55%', borderRadius: 3, distributed: true,
+            dataLabels: { position: 'top' }
+        } },
+        dataLabels: { enabled: true, formatter: v => (v > 0 ? '+' : '') + fmtK(v), offsetX: 30,
             style: { fontSize: '10px', fontWeight: 600, colors: ['#333'] }
         },
         xaxis: { labels: { formatter: v => fmt(v, 0), style: { fontSize: '11px' } } },
@@ -817,8 +829,10 @@ function updateProfitability() {
     // KPI cards
     const nlbProfit = pl['Net Profit']['NLB'];
     const sectorProfit = pl['Net Profit']['Total'];
-    document.getElementById('kpiNlbNetProfit').textContent = commaFmt(nlbProfit, 0);
-    document.getElementById('kpiSectorNetProfit').textContent = commaFmt(sectorProfit, 0);
+    document.getElementById('kpiNlbNetProfit').textContent = fmt(nlbProfit);
+    document.getElementById('kpiNlbProfitUnit').textContent = fmtUnit(nlbProfit);
+    document.getElementById('kpiSectorNetProfit').textContent = fmt(sectorProfit);
+    document.getElementById('kpiSectorProfitUnit').textContent = fmtUnit(sectorProfit);
     document.getElementById('kpiNlbROE').textContent = commaFmt(ratios['ROE']['NLB'], 2);
     document.getElementById('kpiNlbCIR').textContent = commaFmt(ratios['CIR']['NLB'], 1);
     document.getElementById('kpiNlbProfitRank').textContent = '#' + ranks['Net Profit']['NLB'];
