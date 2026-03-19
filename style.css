@@ -569,6 +569,12 @@ body {
 .apexcharts-legend-text { font-family: var(--font) !important; font-size: 0.78rem !important; }
 .apexcharts-title-text { font-family: var(--font) !important; }
 
+/* --- PROFITABILITY SECTION --- */
+.nlb-col { background: rgba(35, 0, 120, 0.04); font-weight: 600; }
+.pl-bold-row td { font-weight: 700; border-top: 2px solid var(--primary); }
+.pl-expense-row td { color: #c0392b; }
+.best-ratio { color: #0d8a56; font-weight: 700; }
+
 /* --- ANIMATIONS --- */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .dashboard-section.active { animation: fadeIn 0.3s ease; }

@@ -43,6 +43,7 @@
             <button class="nav-btn compare-btn" data-section="comparison">Bank vs Bank</button>
             <button class="nav-btn" data-section="segments">Segment Breakdown</button>
             <button class="nav-btn" data-section="growth">Growth Drivers</button>
+            <button class="nav-btn" data-section="profitability">Profitability</button>
             <button class="nav-btn" data-section="insights">Strategic Insights</button>
         </div>
     </nav>
@@ -54,6 +55,7 @@
                 <label>Category</label>
                 <select id="filterCategory">
                     <option value="Assets">Total Assets</option>
+                    <option value="Securities">Securities</option>
                     <option value="Gross Loans">Gross Loans</option>
                     <option value="Corporate Loans">Corporate Loans</option>
                     <option value="Retail Loans">Retail Loans</option>
@@ -356,7 +358,121 @@
         </div>
     </section>
 
-    <!-- SECTION 7: STRATEGIC INSIGHTS -->
+    <!-- SECTION 8: PROFITABILITY & P&L -->
+    <section class="dashboard-section" id="sec-profitability">
+        <div class="section-header">
+            <h2>Profitability & P&L Analysis</h2>
+            <p class="section-subtitle" id="plSubtitle">Income statement breakdown and key performance ratios — Feb 2026</p>
+        </div>
+
+        <!-- P&L KPI Row -->
+        <div class="kpi-row">
+            <div class="kpi-card highlight">
+                <span class="kpi-label">NLB Net Profit</span>
+                <span class="kpi-value" id="kpiNlbNetProfit">—</span>
+                <span class="kpi-unit">k EUR</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Sector Net Profit</span>
+                <span class="kpi-value" id="kpiSectorNetProfit">—</span>
+                <span class="kpi-unit">k EUR</span>
+            </div>
+            <div class="kpi-card highlight">
+                <span class="kpi-label">NLB ROE</span>
+                <span class="kpi-value" id="kpiNlbROE">—</span>
+                <span class="kpi-unit">%</span>
+            </div>
+            <div class="kpi-card highlight">
+                <span class="kpi-label">NLB CIR</span>
+                <span class="kpi-value" id="kpiNlbCIR">—</span>
+                <span class="kpi-unit">%</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">NLB Profit Rank</span>
+                <span class="kpi-value" id="kpiNlbProfitRank">—</span>
+                <span class="kpi-unit"></span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">NLB Profit Share</span>
+                <span class="kpi-value" id="kpiNlbProfitShare">—</span>
+                <span class="kpi-unit">% of sector</span>
+            </div>
+        </div>
+
+        <!-- P&L Insight -->
+        <div class="insight-box" id="plInsight">
+            <div class="insight-icon">&#9672;</div>
+            <p id="plInsightText">Loading profitability insights...</p>
+        </div>
+
+        <!-- P&L Charts Row 1 -->
+        <div class="chart-row two-col">
+            <div class="chart-card">
+                <h3>Net Profit by Bank</h3>
+                <p class="chart-subtitle">Ranked horizontal bar — k EUR</p>
+                <div id="chartNetProfit" class="chart-container chart-tall"></div>
+            </div>
+            <div class="chart-card">
+                <h3>Income Structure — NLB vs Peers</h3>
+                <p class="chart-subtitle">Breakdown of total income sources</p>
+                <div id="chartIncomeStructure" class="chart-container chart-tall"></div>
+            </div>
+        </div>
+
+        <!-- P&L Charts Row 2 -->
+        <div class="chart-row two-col">
+            <div class="chart-card">
+                <h3>ROE — Return on Equity</h3>
+                <p class="chart-subtitle">After-tax return — % annualized</p>
+                <div id="chartROE" class="chart-container chart-tall"></div>
+            </div>
+            <div class="chart-card">
+                <h3>CIR — Cost to Income Ratio</h3>
+                <p class="chart-subtitle">Operating efficiency — lower is better</p>
+                <div id="chartCIR" class="chart-container chart-tall"></div>
+            </div>
+        </div>
+
+        <!-- P&L Charts Row 3 -->
+        <div class="chart-row two-col">
+            <div class="chart-card">
+                <h3>ROA — Return on Assets</h3>
+                <p class="chart-subtitle">Profitability relative to total assets</p>
+                <div id="chartROA" class="chart-container chart-tall"></div>
+            </div>
+            <div class="chart-card">
+                <h3>NPL Ratio & Coverage</h3>
+                <p class="chart-subtitle">Asset quality — NPL% and provision coverage</p>
+                <div id="chartNPL" class="chart-container chart-tall"></div>
+            </div>
+        </div>
+
+        <!-- P&L Full Table -->
+        <div class="chart-card full-width">
+            <h3>Full P&L Breakdown — All Banks</h3>
+            <p class="chart-subtitle">Income statement for the period ended Feb 2026 (k EUR)</p>
+            <div class="table-wrapper">
+                <table class="ranking-table" id="plTable">
+                    <thead id="plTableHead"></thead>
+                    <tbody id="plTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Ratios Table -->
+        <div class="chart-card full-width">
+            <h3>Key Performance Ratios — All Banks</h3>
+            <p class="chart-subtitle">CAR, NPL, Coverage, ROA, ROE, CIR, LCR</p>
+            <div class="table-wrapper">
+                <table class="ranking-table" id="ratiosTable">
+                    <thead id="ratiosTableHead"></thead>
+                    <tbody id="ratiosTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 9: STRATEGIC INSIGHTS -->
     <section class="dashboard-section" id="sec-insights">
         <div class="section-header">
             <h2>Strategic Insights</h2>

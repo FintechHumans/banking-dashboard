@@ -137,6 +137,7 @@ function updateActiveSection(section) {
     else if (section === 'competitive') updateCompetitive();
     else if (section === 'segments') updateSegments();
     else if (section === 'growth') updateGrowth();
+    else if (section === 'profitability') updateProfitability();
     else if (section === 'insights') updateInsights();
 }
 
@@ -144,7 +145,7 @@ function updateActiveSection(section) {
 function updateDashboard() {
     const cat = getSelectedCategory();
     const idx = getSelectedPeriodIdx();
-    const prevIdx = idx > 0 ? idx - 1 : 0;
+    const prevIdx = idx > 0 ? idx - 1 : null;
     const topN = getTopN();
     const period = dateLabel(DATES[idx]);
 
@@ -156,7 +157,7 @@ function updateDashboard() {
     const totalVal = getVal('eur', cat, 'Total', idx);
     const nlbVal = getVal('eur', cat, 'NLB', idx);
     const nlbShare = getVal('pct', cat, 'NLB', idx);
-    const nlbSharePrev = getVal('pct', cat, 'NLB', prevIdx);
+    const nlbSharePrev = prevIdx != null ? getVal('pct', cat, 'NLB', prevIdx) : null;
     const shareChange = (nlbShare != null && nlbSharePrev != null) ? nlbShare - nlbSharePrev : null;
 
     const sorted = getSortedBanks(cat, idx);
@@ -191,7 +192,7 @@ function updateDashboard() {
     // NLB Trend
     renderNlbTrendChart(cat);
     // Ranking Table
-    renderRankingTable(cat, idx, prevIdx, topN);
+    renderRankingTable(cat, idx, prevIdx != null ? prevIdx : idx, topN);
 
     // Update other visible sections
     const activeNav = document.querySelector('.nav-btn.active');
@@ -360,7 +361,7 @@ function updateTrends() {
 function updateCompetitive() {
     const cat = getSelectedCategory();
     const idx = getSelectedPeriodIdx();
-    const prevIdx = idx > 0 ? idx - 1 : 0;
+    const prevIdx = idx > 0 ? idx - 1 : idx;
     const topN = getTopN();
     const sorted = getSortedBanks(cat, idx);
     const banks = sorted.slice(0, topN);
@@ -406,7 +407,7 @@ function updateCompetitive() {
     });
 
     // Heatmap
-    const heatCats = CATS.slice(0, 9);
+    const heatCats = CATS;
     const heatBanks = getSortedBanks('Assets', idx).slice(0, 7);
     const heatSeries = heatBanks.map(b => ({
         name: b,
@@ -438,7 +439,7 @@ function updateComparison() {
     const bankB = document.getElementById('compareB').value;
     const cat = getSelectedCategory();
     const idx = getSelectedPeriodIdx();
-    const prevIdx = idx > 0 ? idx - 1 : 0;
+    const prevIdx = idx > 0 ? idx - 1 : idx;
 
     document.getElementById('thBankA').textContent = bankA;
     document.getElementById('thBankB').textContent = bankB;
@@ -457,12 +458,12 @@ function updateComparison() {
 
     // KPI Cards
     const kpiData = [
-        { label: 'Market Share', aVal: aShare, bVal: bShare, fmt: v => fmtPct(v), better: 'higher' },
-        { label: 'Value (k EUR)', aVal: aVal, bVal: bVal, fmt: v => fmt(v), better: 'higher' },
-        { label: 'Growth Rate', aVal: aGrowth, bVal: bGrowth, fmt: v => v != null ? v.toFixed(2) + '%' : '—', better: 'higher' },
-        { label: 'Rank', aVal: aRank, bVal: bRank, fmt: v => '#' + v, better: 'lower' },
+        { label: 'Market Share', aVal: aShare, bVal: bShare, fmt: v => fmtPct(v), gapFmt: v => fmtPP(v) + ' pp', better: 'higher' },
+        { label: 'Value (k EUR)', aVal: aVal, bVal: bVal, fmt: v => fmt(v), gapFmt: v => (v > 0 ? '+' : '') + commaFmt(v, 0) + ' k', better: 'higher' },
+        { label: 'Growth Rate', aVal: aGrowth, bVal: bGrowth, fmt: v => v != null ? commaFmt(v, 2) + '%' : '—', gapFmt: v => fmtPP(v) + ' pp', better: 'higher' },
+        { label: 'Rank', aVal: aRank, bVal: bRank, fmt: v => '#' + v, gapFmt: v => (v > 0 ? '+' : '') + v, better: 'lower' },
         { label: 'Share Change (pp)', aVal: aShare != null && aSharePrev != null ? aShare - aSharePrev : null,
-          bVal: bShare != null && bSharePrev != null ? bShare - bSharePrev : null, fmt: v => fmtPP(v), better: 'higher' },
+          bVal: bShare != null && bSharePrev != null ? bShare - bSharePrev : null, fmt: v => fmtPP(v), gapFmt: v => fmtPP(v) + ' pp', better: 'higher' },
     ];
 
     const kpiContainer = document.getElementById('compareKpis');
@@ -470,7 +471,7 @@ function updateComparison() {
     kpiData.forEach(kpi => {
         const aW = kpi.better === 'higher' ? (kpi.aVal || 0) >= (kpi.bVal || 0) : (kpi.aVal || 0) <= (kpi.bVal || 0);
         const gap = kpi.aVal != null && kpi.bVal != null ? kpi.aVal - kpi.bVal : null;
-        const gapClass = gap != null ? (gap > 0 ? (kpi.better === 'higher' ? 'positive' : 'negative') : (kpi.better === 'higher' ? 'negative' : 'positive')) : '';
+        const gapClass = gap != null ? (gap > 0 ? (kpi.better === 'higher' ? 'positive' : 'negative') : gap < 0 ? (kpi.better === 'higher' ? 'negative' : 'positive') : '') : '';
 
         kpiContainer.innerHTML += `
             <div class="compare-kpi-card">
@@ -481,7 +482,7 @@ function updateComparison() {
                         <span class="val-num bank-a-color">${kpi.fmt(kpi.aVal)}</span>
                     </div>
                     <div class="compare-gap ${gapClass}">
-                        ${gap != null ? (gap > 0 ? '+' : '') + commaFmt(gap, 2) : '—'}
+                        ${gap != null ? kpi.gapFmt(gap) : '—'}
                     </div>
                     <div class="compare-val">
                         <span class="val-label">${bankB}</span>
@@ -540,7 +541,7 @@ function updateComparison() {
     });
 
     // Bar comparison across segments
-    const segCats = CATS.slice(0, 9);
+    const segCats = CATS;
     const aSegVals = segCats.map(c => getVal('pct', c, bankA, idx) || 0);
     const bSegVals = segCats.map(c => getVal('pct', c, bankB, idx) || 0);
     const segLabels = segCats.map(c => c.replace('Deposits from ', 'Dep. ').replace('Corporate', 'Corp.').replace('Consumer', 'Cons.').replace('Housing', 'Hous.').replace('Gross ', ''));
@@ -603,7 +604,7 @@ function updateComparison() {
 function renderCompareTable(bankA, bankB, idx, prevIdx) {
     const tbody = document.getElementById('compareBody');
     tbody.innerHTML = '';
-    const segCats = CATS.slice(0, 9);
+    const segCats = CATS;
 
     segCats.forEach(cat => {
         const aShare = getVal('pct', cat, bankA, idx);
@@ -640,7 +641,7 @@ function quickCompare(bank) {
 // --- SECTION 5: SEGMENTS ---
 function updateSegments() {
     const idx = getSelectedPeriodIdx();
-    const segCats = CATS.slice(0, 9);
+    const segCats = CATS;
     const segLabels = segCats.map(c => c.replace('Deposits from ', 'Dep. ').replace('Corporate', 'Corp.').replace('Consumer', 'Cons.').replace('Housing', 'Hous.').replace('Gross ', ''));
 
     // NLB share by segment
@@ -719,15 +720,34 @@ function updateSegments() {
 function updateGrowth() {
     const cat = getSelectedCategory();
     const idx = getSelectedPeriodIdx();
-    const prevIdx = idx > 0 ? idx - 1 : 0;
+    const prevIdx = idx > 0 ? idx - 1 : null;
     const topN = getTopN();
+
+    // First-period edge case: no previous period available
+    if (prevIdx === null) {
+        document.getElementById('growthInsightText').textContent = 'Growth data requires at least two periods. Please select a later period.';
+        ['chartGrowthRate', 'chartGrowthContrib'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = '<p style="text-align:center;color:#999;padding:60px 0">No prior period available for growth calculation.</p>'; });
+        return;
+    }
+
+    // Use Total row for market-level growth (correct denominator)
+    const totalCur = getVal('eur', cat, 'Total', idx);
+    const totalPrev = getVal('eur', cat, 'Total', prevIdx);
+    const totalMarketGrowth = (totalCur && totalPrev) ? totalCur - totalPrev : 0;
 
     const growthData = BANKS.map(b => {
         const cur = getVal('eur', cat, b, idx);
         const prev = getVal('eur', cat, b, prevIdx);
         const growth = (cur && prev) ? ((cur / prev - 1) * 100) : null;
-        const absChange = (cur && prev) ? cur - prev : null;
-        return { bank: b, growth, absChange };
+        const absChange = (cur != null && prev != null) ? cur - prev : null;
+        // Contribution uses Total row as denominator
+        let contribution = null;
+        if (absChange != null && totalMarketGrowth !== 0) {
+            contribution = (absChange / totalMarketGrowth) * 100;
+            // Guard: cap extreme values at +/-200%
+            if (Math.abs(contribution) > 200) contribution = Math.sign(contribution) * 200;
+        }
+        return { bank: b, growth, absChange, contribution };
     }).filter(d => d.growth != null).sort((a, b) => b.growth - a.growth).slice(0, topN);
 
     // Growth rate
@@ -749,14 +769,14 @@ function updateGrowth() {
         tooltip: { y: { formatter: v => v.toFixed(2) + '%' } }
     });
 
-    // Absolute contribution
-    const contribData = growthData.sort((a, b) => b.absChange - a.absChange);
+    // Absolute contribution (sorted by absChange)
+    const contribData = [...growthData].sort((a, b) => b.absChange - a.absChange);
     renderChart('chartGrowthContrib', {
         chart: { type: 'bar', height: 420, fontFamily: 'Inter, sans-serif', toolbar: { show: false } },
         series: [{ name: 'Change (k EUR)', data: contribData.map(d => ({ x: d.bank, y: Math.round(d.absChange) })) }],
         colors: [({ dataPointIndex }) => {
             const b = contribData[dataPointIndex]?.bank;
-            return b === 'NLB' ? NLB_COLOR : '#6b7280';
+            return b === 'NLB' ? NLB_COLOR : (contribData[dataPointIndex]?.absChange >= 0 ? '#6b7280' : '#c0392b');
         }],
         plotOptions: { bar: { horizontal: true, barHeight: '55%', borderRadius: 3, distributed: true } },
         dataLabels: { enabled: true, formatter: v => fmtK(v), offsetX: 5,
@@ -769,18 +789,228 @@ function updateGrowth() {
         tooltip: { y: { formatter: v => fmtK(v) + ' k EUR' } }
     });
 
-    // Growth insight
-    const nlbGrowth = growthData.find(d => d.bank === 'NLB');
-    const fastest = growthData[0];
+    // Growth insight — uses Total row for contribution
+    const nlbGrowthItem = growthData.find(d => d.bank === 'NLB');
+    const fastest = [...growthData].sort((a, b) => b.growth - a.growth)[0];
     let gInsight = [];
-    if (nlbGrowth) gInsight.push(`NLB grew by ${nlbGrowth.growth.toFixed(1)}% in ${cat} during the latest period, with an absolute increase of ${fmtK(nlbGrowth.absChange)} k EUR.`);
+    if (nlbGrowthItem) gInsight.push(`NLB grew by ${nlbGrowthItem.growth.toFixed(1)}% in ${cat} during the latest period, with an absolute increase of ${fmtK(nlbGrowthItem.absChange)} k EUR.`);
     if (fastest && fastest.bank !== 'NLB') gInsight.push(`The fastest growing bank is ${fastest.bank} at ${fastest.growth.toFixed(1)}%.`);
-    const totalGrowth = growthData.reduce((s, d) => s + d.absChange, 0);
-    if (nlbGrowth && totalGrowth) gInsight.push(`NLB contributed ${(nlbGrowth.absChange / totalGrowth * 100).toFixed(1)}% of total market growth.`);
+    if (nlbGrowthItem && totalMarketGrowth !== 0) {
+        const nlbContrib = (nlbGrowthItem.absChange / totalMarketGrowth * 100);
+        if (totalMarketGrowth > 0) {
+            gInsight.push(`NLB contributed ${nlbContrib.toFixed(1)}% of total market growth (${fmtK(totalMarketGrowth)} k EUR total).`);
+        } else {
+            gInsight.push(`Total market ${cat} declined by ${fmtK(Math.abs(totalMarketGrowth))} k EUR. NLB accounted for ${Math.abs(nlbContrib).toFixed(1)}% of the decline.`);
+        }
+    }
     document.getElementById('growthInsightText').textContent = gInsight.join(' ') || 'Select a category and period to view growth insights.';
 }
 
-// --- SECTION 7: STRATEGIC INSIGHTS ---
+// --- SECTION 8: PROFITABILITY & P&L ---
+function updateProfitability() {
+    const prof = D.profitability;
+    if (!prof) return;
+    const pl = prof.plItems;
+    const ratios = prof.ratios;
+    const ranks = prof.ranks;
+
+    // KPI cards
+    const nlbProfit = pl['Net Profit']['NLB'];
+    const sectorProfit = pl['Net Profit']['Total'];
+    document.getElementById('kpiNlbNetProfit').textContent = commaFmt(nlbProfit, 0);
+    document.getElementById('kpiSectorNetProfit').textContent = commaFmt(sectorProfit, 0);
+    document.getElementById('kpiNlbROE').textContent = commaFmt(ratios['ROE']['NLB'], 2);
+    document.getElementById('kpiNlbCIR').textContent = commaFmt(ratios['CIR']['NLB'], 1);
+    document.getElementById('kpiNlbProfitRank').textContent = '#' + ranks['Net Profit']['NLB'];
+    document.getElementById('kpiNlbProfitShare').textContent = commaFmt(ratios['Net Profit Market Share']['NLB'], 1);
+
+    // Insight text
+    const nlbROE = ratios['ROE']['NLB'];
+    const nlbCIR = ratios['CIR']['NLB'];
+    const avgROE = BANKS.reduce((s, b) => s + (ratios['ROE'][b] || 0), 0) / BANKS.length;
+    const avgCIR = BANKS.reduce((s, b) => s + (ratios['CIR'][b] || 0), 0) / BANKS.length;
+    let insightParts = [];
+    insightParts.push(`NLB reported a net profit of ${commaFmt(nlbProfit, 0)} k EUR, ranking #${ranks['Net Profit']['NLB']} in the sector and capturing ${commaFmt(ratios['Net Profit Market Share']['NLB'], 1)}% of total banking profits.`);
+    insightParts.push(`NLB's ROE of ${commaFmt(nlbROE, 1)}% ${nlbROE > avgROE ? 'exceeds' : 'trails'} the sector average of ${commaFmt(avgROE, 1)}%.`);
+    insightParts.push(`CIR at ${commaFmt(nlbCIR, 1)}% is the ${nlbCIR < avgCIR ? 'best (lowest)' : 'above average'} in the sector, indicating ${nlbCIR < 40 ? 'exceptional' : nlbCIR < 50 ? 'strong' : 'moderate'} operational efficiency.`);
+    document.getElementById('plInsightText').textContent = insightParts.join(' ');
+
+    // Net Profit bar chart
+    const profitData = BANKS.map(b => ({ bank: b, val: pl['Net Profit'][b] || 0 })).sort((a, b) => b.val - a.val);
+    renderChart('chartNetProfit', {
+        chart: { type: 'bar', height: 420, fontFamily: 'Inter, sans-serif', toolbar: { show: false } },
+        series: [{ name: 'Net Profit (k EUR)', data: profitData.map(d => ({ x: d.bank, y: Math.round(d.val) })) }],
+        colors: [({ dataPointIndex }) => profitData[dataPointIndex]?.bank === 'NLB' ? NLB_COLOR : (profitData[dataPointIndex]?.val >= 0 ? '#6b7280' : '#c0392b')],
+        plotOptions: { bar: { horizontal: true, barHeight: '55%', borderRadius: 3, distributed: true } },
+        dataLabels: { enabled: true, formatter: v => commaFmt(v, 0), offsetX: 5, style: { fontSize: '11px', fontWeight: 600, colors: ['#333'] } },
+        xaxis: { labels: { formatter: v => commaFmt(v, 0), style: { fontSize: '11px' } } },
+        yaxis: { labels: { style: { fontSize: '12px', fontWeight: 600 } } },
+        legend: { show: false },
+        grid: { borderColor: '#f0f0f0' },
+        tooltip: { y: { formatter: v => commaFmt(v, 0) + ' k EUR' } }
+    });
+
+    // Income Structure — stacked bar NLB vs top peers
+    const top5 = profitData.filter(d => d.val > 0).slice(0, 6).map(d => d.bank);
+    const nii = top5.map(b => pl['Net Interest Income'][b] || 0);
+    const nfci = top5.map(b => pl['Net Fee & Commission Income'][b] || 0);
+    const otherInc = top5.map(b => {
+        const total = pl['Total Income'][b] || 0;
+        const ni = pl['Net Interest Income'][b] || 0;
+        const nf = pl['Net Fee & Commission Income'][b] || 0;
+        return total - ni - nf;
+    });
+
+    renderChart('chartIncomeStructure', {
+        chart: { type: 'bar', height: 420, stacked: true, fontFamily: 'Inter, sans-serif', toolbar: { show: false } },
+        series: [
+            { name: 'Net Interest Income', data: nii },
+            { name: 'Net Fee & Commission', data: nfci },
+            { name: 'Other Income', data: otherInc }
+        ],
+        colors: [NLB_COLOR, '#6b7280', '#d4d4e8'],
+        plotOptions: { bar: { borderRadius: 3, columnWidth: '55%' } },
+        xaxis: { categories: top5, labels: { style: { fontSize: '12px', fontWeight: 600 } } },
+        yaxis: { labels: { formatter: v => commaFmt(v, 0), style: { fontSize: '11px' } } },
+        dataLabels: { enabled: false },
+        legend: { position: 'top', fontSize: '12px' },
+        tooltip: { y: { formatter: v => commaFmt(v, 0) + ' k EUR' } },
+        grid: { borderColor: '#f0f0f0' }
+    });
+
+    // ROE chart
+    const roeData = BANKS.map(b => ({ bank: b, val: ratios['ROE'][b] || 0 })).sort((a, b) => b.val - a.val);
+    renderChart('chartROE', {
+        chart: { type: 'bar', height: 420, fontFamily: 'Inter, sans-serif', toolbar: { show: false } },
+        series: [{ name: 'ROE %', data: roeData.map(d => ({ x: d.bank, y: d.val })) }],
+        colors: [({ dataPointIndex }) => roeData[dataPointIndex]?.bank === 'NLB' ? NLB_COLOR : (roeData[dataPointIndex]?.val >= 0 ? '#6b7280' : '#c0392b')],
+        plotOptions: { bar: { horizontal: true, barHeight: '55%', borderRadius: 3, distributed: true } },
+        dataLabels: { enabled: true, formatter: v => commaFmt(v, 1) + '%', offsetX: 5, style: { fontSize: '11px', fontWeight: 600, colors: ['#333'] } },
+        xaxis: { labels: { formatter: v => v.toFixed(0) + '%', style: { fontSize: '11px' } } },
+        yaxis: { labels: { style: { fontSize: '12px', fontWeight: 600 } } },
+        legend: { show: false },
+        grid: { borderColor: '#f0f0f0' },
+        tooltip: { y: { formatter: v => commaFmt(v, 2) + '%' } }
+    });
+
+    // CIR chart (lower is better, so sort ascending)
+    const cirData = BANKS.map(b => ({ bank: b, val: ratios['CIR'][b] || 0 })).sort((a, b) => a.val - b.val);
+    renderChart('chartCIR', {
+        chart: { type: 'bar', height: 420, fontFamily: 'Inter, sans-serif', toolbar: { show: false } },
+        series: [{ name: 'CIR %', data: cirData.map(d => ({ x: d.bank, y: d.val })) }],
+        colors: [({ dataPointIndex }) => {
+            const b = cirData[dataPointIndex]?.bank;
+            const v = cirData[dataPointIndex]?.val;
+            return b === 'NLB' ? NLB_COLOR : (v <= 50 ? '#0d8a56' : v <= 80 ? '#d68a00' : '#c0392b');
+        }],
+        plotOptions: { bar: { horizontal: true, barHeight: '55%', borderRadius: 3, distributed: true } },
+        dataLabels: { enabled: true, formatter: v => commaFmt(v, 1) + '%', offsetX: 5, style: { fontSize: '11px', fontWeight: 600, colors: ['#333'] } },
+        xaxis: { labels: { formatter: v => v.toFixed(0) + '%', style: { fontSize: '11px' } } },
+        yaxis: { labels: { style: { fontSize: '12px', fontWeight: 600 } } },
+        legend: { show: false },
+        grid: { borderColor: '#f0f0f0' },
+        tooltip: { y: { formatter: v => commaFmt(v, 2) + '%' } },
+        annotations: { xaxis: [{ x: 50, borderColor: '#c0392b', strokeDashArray: 4, label: { text: '50% threshold', style: { background: '#c0392b', color: '#fff', fontSize: '10px' } } }] }
+    });
+
+    // ROA chart
+    const roaData = BANKS.map(b => ({ bank: b, val: ratios['ROA'][b] || 0 })).sort((a, b) => b.val - a.val);
+    renderChart('chartROA', {
+        chart: { type: 'bar', height: 420, fontFamily: 'Inter, sans-serif', toolbar: { show: false } },
+        series: [{ name: 'ROA %', data: roaData.map(d => ({ x: d.bank, y: d.val })) }],
+        colors: [({ dataPointIndex }) => roaData[dataPointIndex]?.bank === 'NLB' ? NLB_COLOR : (roaData[dataPointIndex]?.val >= 0 ? '#6b7280' : '#c0392b')],
+        plotOptions: { bar: { horizontal: true, barHeight: '55%', borderRadius: 3, distributed: true } },
+        dataLabels: { enabled: true, formatter: v => commaFmt(v, 2) + '%', offsetX: 5, style: { fontSize: '11px', fontWeight: 600, colors: ['#333'] } },
+        xaxis: { labels: { formatter: v => v.toFixed(1) + '%', style: { fontSize: '11px' } } },
+        yaxis: { labels: { style: { fontSize: '12px', fontWeight: 600 } } },
+        legend: { show: false },
+        grid: { borderColor: '#f0f0f0' },
+        tooltip: { y: { formatter: v => commaFmt(v, 2) + '%' } }
+    });
+
+    // NPL & Coverage dual chart
+    const nplData = BANKS.map(b => ({ bank: b, npl: ratios['NPL'][b] || 0, coverage: ratios['Coverage Ratio'][b] || 0 }))
+        .sort((a, b) => a.npl - b.npl);
+    renderChart('chartNPL', {
+        chart: { type: 'bar', height: 420, fontFamily: 'Inter, sans-serif', toolbar: { show: false } },
+        series: [
+            { name: 'NPL Ratio %', data: nplData.map(d => d.npl), type: 'bar' },
+            { name: 'Coverage Ratio %', data: nplData.map(d => d.coverage), type: 'line' }
+        ],
+        colors: [({ dataPointIndex }) => nplData[dataPointIndex]?.bank === 'NLB' ? NLB_COLOR : '#6b7280', '#0d8a56'],
+        plotOptions: { bar: { borderRadius: 3, columnWidth: '50%', distributed: false } },
+        xaxis: { categories: nplData.map(d => d.bank), labels: { style: { fontSize: '12px', fontWeight: 600 } } },
+        yaxis: [
+            { title: { text: 'NPL %' }, labels: { formatter: v => v.toFixed(1) + '%', style: { fontSize: '11px' } } },
+            { opposite: true, title: { text: 'Coverage %' }, labels: { formatter: v => v.toFixed(0) + '%', style: { fontSize: '11px' } } }
+        ],
+        dataLabels: { enabled: false },
+        legend: { position: 'top', fontSize: '12px' },
+        tooltip: { y: { formatter: v => commaFmt(v, 2) + '%' } },
+        grid: { borderColor: '#f0f0f0' },
+        stroke: { width: [0, 3], curve: 'smooth' },
+        markers: { size: [0, 5] }
+    });
+
+    // Full P&L Table
+    const plItems = ['Interest Income', 'Interest Expense', 'Net Interest Income',
+        'Fee & Commission Income', 'Net Fee & Commission Income', 'Total Income',
+        'Operating Expenses', 'Total Impairment', 'Profit Before Tax', 'Net Profit'];
+    const thead = document.getElementById('plTableHead');
+    thead.innerHTML = `<tr><th>P&L Item</th>${BANKS.map(b => `<th${b === 'NLB' ? ' class="nlb-col"' : ''}>${b}</th>`).join('')}<th>Total</th></tr>`;
+    const tbody = document.getElementById('plTableBody');
+    tbody.innerHTML = '';
+    const boldItems = ['Net Interest Income', 'Total Income', 'Profit Before Tax', 'Net Profit'];
+    plItems.forEach(item => {
+        const data = pl[item];
+        if (!data) return;
+        const isBold = boldItems.includes(item);
+        const isExpense = (data['NLB'] || 0) < 0;
+        tbody.innerHTML += `<tr class="${isBold ? 'pl-bold-row' : ''} ${isExpense ? 'pl-expense-row' : ''}">
+            <td><strong>${item}</strong></td>
+            ${BANKS.map(b => {
+                const v = data[b];
+                return `<td${b === 'NLB' ? ' class="nlb-col"' : ''}>${v != null ? commaFmt(v, 0) : '—'}</td>`;
+            }).join('')}
+            <td><strong>${data['Total'] != null ? commaFmt(data['Total'], 0) : '—'}</strong></td>
+        </tr>`;
+    });
+
+    // Ratios Table
+    const ratioItems = ['ROA', 'ROE', 'CIR', 'NPL', 'CAR', 'Coverage Ratio', 'LCR', 'NII to Total Income', 'Net Profit Market Share'];
+    const ratioLabels = {
+        'ROA': 'Return on Assets (%)', 'ROE': 'Return on Equity (%)', 'CIR': 'Cost/Income Ratio (%)',
+        'NPL': 'NPL Ratio (%)', 'CAR': 'Capital Adequacy (%)', 'Coverage Ratio': 'Coverage Ratio (%)',
+        'LCR': 'Liquidity Coverage (%)', 'NII to Total Income': 'NII / Total Income (%)',
+        'Net Profit Market Share': 'Profit Market Share (%)'
+    };
+    const rHead = document.getElementById('ratiosTableHead');
+    rHead.innerHTML = `<tr><th>Ratio</th>${BANKS.map(b => `<th${b === 'NLB' ? ' class="nlb-col"' : ''}>${b}</th>`).join('')}</tr>`;
+    const rBody = document.getElementById('ratiosTableBody');
+    rBody.innerHTML = '';
+    ratioItems.forEach(r => {
+        const data = ratios[r];
+        if (!data) return;
+        // Determine best bank for this ratio
+        const isLowerBetter = ['CIR', 'NPL'].includes(r);
+        const vals = BANKS.map(b => ({ b, v: data[b] })).filter(d => d.v != null);
+        const best = isLowerBetter
+            ? vals.reduce((m, d) => d.v < m.v ? d : m, vals[0])
+            : vals.reduce((m, d) => d.v > m.v ? d : m, vals[0]);
+
+        rBody.innerHTML += `<tr>
+            <td><strong>${ratioLabels[r] || r}</strong></td>
+            ${BANKS.map(b => {
+                const v = data[b];
+                const isBest = best && best.b === b;
+                const isNLB = b === 'NLB';
+                return `<td class="${isNLB ? 'nlb-col' : ''} ${isBest ? 'best-ratio' : ''}">${v != null ? commaFmt(v, 2) : '—'}${isBest ? ' ★' : ''}</td>`;
+            }).join('')}
+        </tr>`;
+    });
+}
+
+// --- SECTION 9: STRATEGIC INSIGHTS ---
 function updateInsights() {
     const idx = getSelectedPeriodIdx();
     const prevIdx = idx > 0 ? idx - 1 : 0;

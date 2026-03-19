@@ -5161,5 +5161,77 @@ const BANK_DATA = {
     "PRB": "Prime Bank",
     "ZRB": "Ziraat Bank",
     "CRB": "Credins Bank"
+  },
+  "profitability": {
+    "period": "Feb 2026",
+    "plItems": {
+      "Interest Income": {
+        "RBKO": 13469.70, "NLB": 12461.79, "BKT": 11512.33, "PCB": 10645.64,
+        "TEB": 8981.15, "BEK": 7207.34, "BPB": 6433.18, "PRB": 1466.00,
+        "ZRB": 1181.96, "CRB": 1021.95, "Total": 74381.04
+      },
+      "Interest Expense": {
+        "RBKO": -1869.02, "NLB": -3252.97, "BKT": -2848.08, "PCB": -2398.58,
+        "TEB": -146.64, "BEK": -1753.53, "BPB": -1623.05, "PRB": -547.61,
+        "ZRB": -586.91, "CRB": -455.12, "Total": -15481.51
+      },
+      "Net Interest Income": {
+        "RBKO": 11600.68, "NLB": 9208.82, "BKT": 8664.25, "PCB": 8247.06,
+        "TEB": 8834.50, "BEK": 5453.82, "BPB": 4810.12, "PRB": 918.39,
+        "ZRB": 595.06, "CRB": 566.83, "Total": 58899.53
+      },
+      "Fee & Commission Income": {
+        "RBKO": 4993.14, "NLB": 3017.35, "BKT": 1959.06, "PCB": 2666.60,
+        "TEB": 3700.90, "BEK": 1115.86, "BPB": 1118.02, "PRB": 107.00,
+        "ZRB": 77.23, "CRB": 114.63, "Total": 18869.78
+      },
+      "Net Fee & Commission Income": {
+        "RBKO": 1383.67, "NLB": 1761.10, "BKT": 1524.89, "PCB": 1077.64,
+        "TEB": 1992.31, "BEK": 390.68, "BPB": 556.23, "PRB": 76.00,
+        "ZRB": -35.82, "CRB": 70.71, "Total": 8797.41
+      },
+      "Total Income": {
+        "RBKO": 13409.04, "NLB": 10445.38, "BKT": 10740.98, "PCB": 9281.83,
+        "TEB": 10482.09, "BEK": 6349.26, "BPB": 5632.38, "PRB": 999.39,
+        "ZRB": 568.45, "CRB": 648.17, "Total": 68556.98
+      },
+      "Operating Expenses": {
+        "RBKO": -7805.31, "NLB": -3421.70, "BKT": -4353.50, "PCB": -4305.39,
+        "TEB": -5026.74, "BEK": -3166.46, "BPB": -2598.42, "PRB": -845.00,
+        "ZRB": -677.05, "CRB": -690.65, "Total": -32890.22
+      },
+      "Total Impairment": {
+        "RBKO": -956.15, "NLB": -763.78, "BKT": 188.77, "PCB": -279.91,
+        "TEB": -672.60, "BEK": -1517.84, "BPB": -600.49, "PRB": -92.00,
+        "ZRB": -371.94, "CRB": -228.06, "Total": -5293.99
+      },
+      "Profit Before Tax": {
+        "RBKO": 4647.58, "NLB": 6259.90, "BKT": 6576.26, "PCB": 4696.53,
+        "TEB": 4782.75, "BEK": 1664.96, "BPB": 2433.47, "PRB": 62.39,
+        "ZRB": -480.53, "CRB": -270.54, "Total": 30372.76
+      },
+      "Net Profit": {
+        "RBKO": 4136.34, "NLB": 5654.90, "BKT": 6117.16, "PCB": 4227.81,
+        "TEB": 4306.21, "BEK": 1498.46, "BPB": 2164.66, "PRB": 52.39,
+        "ZRB": -480.53, "CRB": -270.54, "Total": 27406.86
+      }
+    },
+    "ratios": {
+      "ROA": { "RBKO": 1.30, "NLB": 2.21, "BKT": 2.40, "PCB": 1.70, "TEB": 2.53, "BEK": 1.13, "BPB": 1.85, "PRB": 0.23, "ZRB": -2.10, "CRB": -1.36 },
+      "ROE": { "RBKO": 12.81, "NLB": 18.56, "BKT": 18.59, "PCB": 15.70, "TEB": 15.47, "BEK": 9.44, "BPB": 17.23, "PRB": 1.95, "ZRB": -12.22, "CRB": -12.15 },
+      "CIR": { "RBKO": 58.21, "NLB": 32.76, "BKT": 40.53, "PCB": 46.39, "TEB": 47.96, "BEK": 49.87, "BPB": 46.13, "PRB": 84.55, "ZRB": 119.10, "CRB": 106.55 },
+      "NPL": { "RBKO": 3.74, "NLB": 1.72, "BKT": 1.12, "PCB": 1.05, "TEB": 0.99, "BEK": 2.72, "BPB": 1.68, "PRB": 0.24, "ZRB": 12.14, "CRB": 5.47 },
+      "CAR": { "RBKO": 16.15, "NLB": 17.86, "BKT": 20.28, "PCB": 16.69, "TEB": 17.76, "BEK": 16.89, "BPB": 15.89, "PRB": 16.58, "ZRB": 20.48, "CRB": 14.29 },
+      "Coverage Ratio": { "RBKO": 96.87, "NLB": 150.37, "BKT": 115.09, "PCB": 137.47, "TEB": 153.80, "BEK": 90.47, "BPB": 158.56, "PRB": 208.19, "ZRB": 76.98, "CRB": 40.18 },
+      "LCR": { "RBKO": 270.31, "NLB": 615.65, "BKT": 356.36, "PCB": 190.20, "TEB": 210.70, "BEK": 340.59, "BPB": 436.09, "PRB": 374.00, "ZRB": 238.83, "CRB": 158.94 },
+      "NII to Total Income": { "RBKO": 86.51, "NLB": 88.16, "BKT": 80.67, "PCB": 88.85, "TEB": 84.28, "BEK": 85.90, "BPB": 85.40, "PRB": 91.90, "ZRB": 104.68, "CRB": 87.45 },
+      "Net Profit Market Share": { "RBKO": 15.09, "NLB": 20.63, "BKT": 22.32, "PCB": 15.43, "TEB": 15.71, "BEK": 5.47, "BPB": 7.90, "PRB": 0.19, "ZRB": -1.75, "CRB": -0.99 }
+    },
+    "ranks": {
+      "Net Profit": { "RBKO": 5, "NLB": 2, "BKT": 1, "PCB": 4, "TEB": 3, "BEK": 7, "BPB": 6, "PRB": 8, "ZRB": 10, "CRB": 9 },
+      "Interest Income": { "RBKO": 1, "NLB": 2, "BKT": 3, "PCB": 4, "TEB": 5, "BEK": 6, "BPB": 7, "PRB": 8, "ZRB": 9, "CRB": 10 },
+      "Net Interest Income": { "RBKO": 1, "NLB": 2, "BKT": 4, "PCB": 5, "TEB": 3, "BEK": 6, "BPB": 7, "PRB": 8, "ZRB": 9, "CRB": 10 },
+      "CIR": { "RBKO": 4, "NLB": 10, "BKT": 9, "PCB": 7, "TEB": 6, "BEK": 5, "BPB": 8, "PRB": 3, "ZRB": 1, "CRB": 2 }
+    }
   }
 };
