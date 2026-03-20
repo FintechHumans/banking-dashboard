@@ -108,6 +108,16 @@
             <div class="kpi-card"><span class="kpi-label">Gap to Leader</span><span class="kpi-value" id="kpiGapLeader">&mdash;</span><span class="kpi-unit">pp</span></div>
         </div>
         <div class="insight-box" id="overviewInsight"><div class="insight-icon">&#9672;</div><p id="overviewInsightText">Loading insights...</p></div>
+        <!-- DRAFT: Executive Commentary -->
+        <div class="insight-box" id="execCommentary" style="border-left: 4px solid #230078; margin-top: 12px;">
+            <div class="insight-icon">&#9672;</div>
+            <div>
+                <h4 style="margin:0 0 8px 0; color:#230078;">Executive Commentary</h4>
+                <p><strong>What happened?</strong> <span id="execWhatHappened">Loading executive commentary...</span></p>
+                <p style="margin-top:6px;"><strong>Why it matters:</strong> <span id="execWhyMatters">Loading...</span></p>
+                <p style="margin-top:6px;"><strong>What should NLB do next?</strong> <span id="execWhatNext">Loading...</span></p>
+            </div>
+        </div>
         <div class="chart-row two-col">
             <div class="chart-card"><h3>Market Share Distribution</h3><p class="chart-subtitle" id="pieSubtitle">Latest Period</p><div id="chartPie" class="chart-container"></div></div>
             <div class="chart-card"><h3>NLB Market Share Trend</h3><p class="chart-subtitle">Historical Evolution</p><div id="chartNlbTrend" class="chart-container"></div></div>
@@ -144,6 +154,11 @@
                 </div>
             </div>
         </div>
+        <!-- DRAFT: Risk of Inaction -->
+        <div class="ceo-card" id="ceoInactionRisk" style="margin-top: 16px; border-left: 4px solid #e74c3c; background: #fff5f5;">
+            <div class="ceo-card-header" style="color: #e74c3c;"><span class="ceo-icon">&#9888;</span> Risk of Inaction</div>
+            <p id="ceoInactionRiskText" style="padding: 12px 16px; margin: 0;">Loading risk of inaction analysis...</p>
+        </div>
     </section>
 
     <!-- SECTION 3: GAP & RANK MOMENTUM -->
@@ -166,6 +181,14 @@
             <div class="card-header-row"><h3>Segment Rank Momentum Heatmap</h3><button class="download-btn" onclick="downloadTableAsImage('rankHeatmapTable','Rank_Heatmap')">&#8681; PNG</button></div>
             <p class="chart-subtitle">NLB rank by segment across last 6 periods &mdash; darker = better rank</p>
             <div id="chartRankHeatmap" class="chart-container chart-tall"></div>
+        </div>
+        <!-- DRAFT: Strategic Implication -->
+        <div class="insight-box" id="gapStrategyInsight" style="margin-top: 12px; border-left: 4px solid #230078;">
+            <div class="insight-icon">&#9672;</div>
+            <div>
+                <h4 style="margin:0 0 6px 0; color:#230078;">Strategic Implication</h4>
+                <p id="gapStrategyInsightText">Loading strategic implication of rank movement...</p>
+            </div>
         </div>
     </section>
 
@@ -247,6 +270,11 @@
             <p class="section-subtitle">What drove NLB's overall market share movement &mdash; segment decomposition</p>
         </div>
         <div class="insight-box"><div class="insight-icon">&#9672;</div><p id="waterfallInsightText">Loading share bridge analysis...</p></div>
+        <!-- DRAFT: Bridge Disclaimer -->
+        <div class="insight-box" style="background: #fffbe6; border-left: 4px solid #f0ad4e; margin-top: 12px;">
+            <div class="insight-icon" style="color: #f0ad4e;">&#9888;</div>
+            <p style="margin:0;"><strong>Note:</strong> This bridge provides a directional driver analysis based on segment-weighted share movements. It is not a perfectly precise causal decomposition.</p>
+        </div>
         <div class="chart-card full-width">
             <h3>Share Bridge &mdash; Segment Contribution to NLB Share Change</h3>
             <p class="chart-subtitle">Waterfall showing how each segment drove overall share movement</p>
@@ -256,6 +284,14 @@
             <div class="card-header-row"><h3>Segment Share Change Detail</h3><button class="download-btn" onclick="downloadTableAsImage('waterfallTable','Share_Bridge')">&#8681; PNG</button></div>
             <p class="chart-subtitle">NLB share change by category with contribution weighting</p>
             <div class="table-wrapper"><table class="ranking-table" id="waterfallTable"><thead id="waterfallHead"></thead><tbody id="waterfallBody"></tbody></table></div>
+        </div>
+        <!-- DRAFT: Growth Quality Assessment -->
+        <div class="insight-box" id="growthQualityInsight" style="margin-top: 12px; border-left: 4px solid #230078;">
+            <div class="insight-icon">&#9672;</div>
+            <div>
+                <h4 style="margin:0 0 6px 0; color:#230078;">Growth Quality Assessment</h4>
+                <p id="growthQualityInsightText">Loading growth quality assessment...</p>
+            </div>
         </div>
     </section>
 
@@ -273,7 +309,22 @@
             <div class="kpi-card"><span class="kpi-label">Interest Expense</span><span class="kpi-value" id="depKpiIntExp">&mdash;</span><span class="kpi-unit">k EUR</span></div>
             <div class="kpi-card"><span class="kpi-label">Deposit Rank</span><span class="kpi-value" id="depKpiRank">&mdash;</span><span class="kpi-unit"></span></div>
         </div>
+        <!-- DRAFT: New KPI cards -->
+        <div class="kpi-row" style="margin-top: 8px;">
+            <div class="kpi-card"><span class="kpi-label">LTD Ratio</span><span class="kpi-value" id="depKpiLTD">&mdash;</span><span class="kpi-unit">%</span></div>
+            <div class="kpi-card"><span class="kpi-label">CASA Ratio</span><span class="kpi-value" id="depKpiCASA">&mdash;</span><span class="kpi-unit">%</span></div>
+            <div class="kpi-card"><span class="kpi-label">Term Deposit Ratio</span><span class="kpi-value" id="depKpiTDR">&mdash;</span><span class="kpi-unit">%</span></div>
+            <div class="kpi-card"><span class="kpi-label">Cost of Deposits</span><span class="kpi-value" id="depKpiCoD">&mdash;</span><span class="kpi-unit">%</span></div>
+        </div>
         <div class="insight-box"><div class="insight-icon">&#9672;</div><p id="depositInsightText">Loading deposit analysis...</p></div>
+        <!-- DRAFT: Management Assessment -->
+        <div class="insight-box" id="depMgmtAssessment" style="margin-top: 12px; border-left: 4px solid #230078;">
+            <div class="insight-icon">&#9672;</div>
+            <div>
+                <h4 style="margin:0 0 6px 0; color:#230078;">Management Assessment</h4>
+                <p id="depMgmtAssessmentText">Loading deposit management assessment...</p>
+            </div>
+        </div>
         <div class="chart-row two-col">
             <div class="chart-card"><h3>NLB Deposit Mix &mdash; Current Period</h3><p class="chart-subtitle">Retail vs Corporate deposits</p><div id="chartDepositMix" class="chart-container"></div></div>
             <div class="chart-card"><h3>Deposit Market Share by Segment</h3><p class="chart-subtitle">NLB share in total, retail, and corporate deposits</p><div id="chartDepositShare" class="chart-container"></div></div>
@@ -281,6 +332,18 @@
         <div class="chart-row two-col">
             <div class="chart-card"><h3>Deposit Growth Trend &mdash; NLB</h3><p class="chart-subtitle">Total, retail, and corporate deposits over time</p><div id="chartDepositTrend" class="chart-container"></div></div>
             <div class="chart-card"><h3>Interest Expense &mdash; All Banks</h3><p class="chart-subtitle">Monthly interest expense comparison (k EUR)</p><div id="chartIntExpense" class="chart-container chart-tall"></div></div>
+        </div>
+        <!-- DRAFT: New chart rows -->
+        <div class="chart-row two-col">
+            <div class="chart-card"><h3>CA / Saving / TDA Stacked Trend</h3><p class="chart-subtitle">NLB deposit product composition over time</p><div id="chartDepProductTrend" class="chart-container"></div></div>
+            <div class="chart-card"><h3>NLB Deposit Product Mix</h3><p class="chart-subtitle">Current period breakdown by product type</p><div id="chartDepProductMix" class="chart-container"></div></div>
+        </div>
+        <div class="chart-row two-col">
+            <div class="chart-card"><h3>Interest Expense / Deposits Trend</h3><p class="chart-subtitle">Funding cost ratio over time</p><div id="chartIntExpDepTrend" class="chart-container"></div></div>
+            <div class="chart-card"><h3>LTD Ratio &mdash; Peer Comparison</h3><p class="chart-subtitle">Loan-to-deposit ratio across all banks</p><div id="chartLTDPeer" class="chart-container chart-tall"></div></div>
+        </div>
+        <div class="chart-row two-col">
+            <div class="chart-card full-width"><h3>Deposit Share vs Funding Cost &mdash; Peer View</h3><p class="chart-subtitle">Scatter: deposit market share vs cost of deposits for all banks</p><div id="chartDepShareVsCost" class="chart-container chart-tall"></div></div>
         </div>
         <div class="chart-card full-width"><h3>Deposit Share &mdash; NLB vs Peers</h3><p class="chart-subtitle">Total deposit market share across all banks</p><div id="chartDepositPeer" class="chart-container chart-tall"></div></div>
     </section>
@@ -332,11 +395,28 @@
             <p class="chart-subtitle">CAR, NPL, Coverage, ROA, ROE, CIR, LCR</p>
             <div class="table-wrapper"><table class="ranking-table" id="ratiosTable"><thead id="ratiosTableHead"></thead><tbody id="ratiosTableBody"></tbody></table></div>
         </div>
+        <!-- DRAFT: Profitability Trend Assessment -->
+        <div class="insight-box" id="profTrendAssessment" style="margin-top: 12px; border-left: 4px solid #230078;">
+            <div class="insight-icon">&#9672;</div>
+            <div>
+                <h4 style="margin:0 0 6px 0; color:#230078;">Profitability Trend Assessment</h4>
+                <p id="profTrendAssessmentText">Loading profitability trend assessment...</p>
+            </div>
+        </div>
+        <!-- DRAFT: New Profitability Trend Charts -->
+        <div class="chart-row two-col">
+            <div class="chart-card"><h3>Net Profit Trend &mdash; NLB</h3><p class="chart-subtitle">Historical net profit evolution</p><div id="chartProfitTrend" class="chart-container"><p style="text-align:center; color:#999; padding-top:60px;">Structure ready &mdash; requires multi-period ratio data</p></div></div>
+            <div class="chart-card"><h3>Profit Share of Sector &mdash; Trend</h3><p class="chart-subtitle">NLB's share of total sector profit over time</p><div id="chartProfitShareTrend" class="chart-container"><p style="text-align:center; color:#999; padding-top:60px;">Structure ready &mdash; requires multi-period ratio data</p></div></div>
+        </div>
+        <div class="chart-row two-col">
+            <div class="chart-card"><h3>ROE Trend &mdash; NLB vs Sector</h3><p class="chart-subtitle">Return on equity comparison over time</p><div id="chartROETrend" class="chart-container"><p style="text-align:center; color:#999; padding-top:60px;">Structure ready &mdash; requires multi-period ratio data</p></div></div>
+            <div class="chart-card"><h3>CIR Trend &mdash; NLB vs Sector</h3><p class="chart-subtitle">Cost-to-income ratio comparison over time</p><div id="chartCIRTrend" class="chart-container"><p style="text-align:center; color:#999; padding-top:60px;">Structure ready &mdash; requires multi-period ratio data</p></div></div>
+        </div>
     </section>
 
     <!-- SECTION 12: PEER QUADRANTS -->
     <section class="dashboard-section" id="sec-quadrants">
-        <div class="section-header"><h2>Peer Strategic Quadrants</h2><p class="section-subtitle">2×2 strategic positioning maps &mdash; NLB highlighted</p></div>
+        <div class="section-header"><h2>Peer Strategic Quadrants</h2><p class="section-subtitle">2x2 strategic positioning maps &mdash; NLB highlighted</p></div>
         <div class="chart-row two-col">
             <div class="chart-card"><h3>Market Share vs Growth</h3><p class="chart-subtitle">Size = asset volume | Position = strategic profile</p><div id="chartQuad1" class="chart-container chart-tall"></div></div>
             <div class="chart-card"><h3>ROE vs CIR</h3><p class="chart-subtitle">Profitability vs efficiency trade-off</p><div id="chartQuad2" class="chart-container chart-tall"></div></div>
@@ -351,10 +431,18 @@
     <section class="dashboard-section" id="sec-scanner">
         <div class="section-header"><h2>Segment Opportunity Scanner</h2><p class="section-subtitle">Strategic priority matrix for NLB across all segments</p></div>
         <div class="insight-box"><div class="insight-icon">&#9672;</div><p id="scannerInsightText">Loading opportunity scanner...</p></div>
+        <!-- DRAFT: Strategy Rationale -->
+        <div class="insight-box" id="scannerRationale" style="margin-top: 12px; border-left: 4px solid #230078;">
+            <div class="insight-icon">&#9672;</div>
+            <div>
+                <h4 style="margin:0 0 6px 0; color:#230078;">Strategy Rationale</h4>
+                <p id="scannerRationaleText">Loading scanner strategy rationale...</p>
+            </div>
+        </div>
         <div class="chart-card full-width">
             <div class="card-header-row"><h3>NLB Segment Opportunity Matrix</h3><button class="download-btn" onclick="downloadTableAsImage('scannerTable','Opportunity_Scanner')">&#8681; PNG</button></div>
             <p class="chart-subtitle">NLB share, rank, gap to leader, growth, and strategic action label</p>
-            <div class="table-wrapper"><table class="ranking-table" id="scannerTable"><thead><tr><th>Segment</th><th>NLB Share</th><th>Rank</th><th>Gap to #1</th><th>NLB Growth</th><th>Market Growth</th><th>Action</th></tr></thead><tbody id="scannerBody"></tbody></table></div>
+            <div class="table-wrapper"><table class="ranking-table" id="scannerTable"><thead><tr><th>Segment</th><th>NLB Share</th><th>Rank</th><th>Gap to #1</th><th>NLB Growth</th><th>Market Growth</th><th>Action</th><th>Management Note</th></tr></thead><tbody id="scannerBody"></tbody></table></div>
         </div>
     </section>
 
@@ -381,16 +469,24 @@
                 <table class="ranking-table">
                     <thead><tr><th>KPI</th><th>Formula</th><th>Source</th></tr></thead>
                     <tbody>
-                        <tr><td>Market Share %</td><td>Bank Value / Total Market Value × 100</td><td>KBA public data</td></tr>
-                        <tr><td>Share Change (pp)</td><td>Current Period Share − Previous Period Share</td><td>Derived</td></tr>
-                        <tr><td>Growth %</td><td>(Current Value / Previous Value − 1) × 100</td><td>Derived</td></tr>
-                        <tr><td>Contribution to Growth</td><td>Bank Absolute Change / Total Market Change × 100</td><td>Derived</td></tr>
-                        <tr><td>Gap to Leader (pp)</td><td>NLB Share − Leader Share</td><td>Derived</td></tr>
-                        <tr><td>ROA %</td><td>Net Profit / Average Total Assets × 100 (annualized)</td><td>KBA ratios</td></tr>
-                        <tr><td>ROE %</td><td>Net Profit / Average Equity × 100 (annualized)</td><td>KBA ratios</td></tr>
-                        <tr><td>CIR %</td><td>Operating Expenses / Total Income × 100</td><td>KBA ratios</td></tr>
-                        <tr><td>NPL %</td><td>Non-performing Loans / Gross Loans × 100</td><td>KBA ratios</td></tr>
-                        <tr><td>Coverage Ratio %</td><td>Provisions / Non-performing Loans × 100</td><td>KBA ratios</td></tr>
+                        <tr><td>Market Share %</td><td>Bank Value / Total Market Value &times; 100</td><td>KBA public data</td></tr>
+                        <tr><td>Share Change (pp)</td><td>Current Period Share &minus; Previous Period Share</td><td>Derived</td></tr>
+                        <tr><td>Growth %</td><td>(Current Value / Previous Value &minus; 1) &times; 100</td><td>Derived</td></tr>
+                        <tr><td>Contribution to Growth</td><td>Bank Absolute Change / Total Market Change &times; 100</td><td>Derived</td></tr>
+                        <tr><td>Gap to Leader (pp)</td><td>NLB Share &minus; Leader Share</td><td>Derived</td></tr>
+                        <tr><td>ROA %</td><td>Net Profit / Average Total Assets &times; 100 (annualized)</td><td>KBA ratios</td></tr>
+                        <tr><td>ROE %</td><td>Net Profit / Average Equity &times; 100 (annualized)</td><td>KBA ratios</td></tr>
+                        <tr><td>CIR %</td><td>Operating Expenses / Total Income &times; 100</td><td>KBA ratios</td></tr>
+                        <tr><td>NPL %</td><td>Non-performing Loans / Gross Loans &times; 100</td><td>KBA ratios</td></tr>
+                        <tr><td>Coverage Ratio %</td><td>Provisions / Non-performing Loans &times; 100</td><td>KBA ratios</td></tr>
+                        <!-- DRAFT: New formulas -->
+                        <tr><td>LTD (Loan-to-Deposit Ratio)</td><td>Gross Loans / Total Deposits &times; 100</td><td>Derived</td></tr>
+                        <tr><td>CASA Ratio</td><td>(Deposits CA) / Total Deposits &times; 100</td><td>Derived</td></tr>
+                        <tr><td>Term Deposit Ratio</td><td>Deposits TDA / Total Deposits &times; 100</td><td>Derived</td></tr>
+                        <tr><td>Savings Ratio</td><td>Deposits Saving / Total Deposits &times; 100</td><td>Derived</td></tr>
+                        <tr><td>Cost of Deposits</td><td>Interest Expense / Total Deposits &times; 100 (annualized)</td><td>Derived</td></tr>
+                        <tr><td>Interest Exp / Deposits</td><td>Interest Expense / Total Deposits</td><td>Derived</td></tr>
+                        <tr><td>Deposit Mix Effect</td><td>Change in CASA ratio period-over-period</td><td>Derived</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -402,6 +498,28 @@
                 <table class="ranking-table" id="auditTable">
                     <thead><tr><th>Check</th><th>Expected</th><th>Actual</th><th>Status</th></tr></thead>
                     <tbody id="auditBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <!-- DRAFT: Deposit & Funding Validation -->
+        <div class="chart-card full-width">
+            <h3>Deposit &amp; Funding Validation</h3>
+            <p class="chart-subtitle">Automated validation of deposit ratios and funding metrics</p>
+            <div class="table-wrapper">
+                <table class="ranking-table" id="auditDepositTable">
+                    <thead><tr><th>Check</th><th>Expected</th><th>Actual</th><th>Status</th></tr></thead>
+                    <tbody id="auditDepositBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <!-- DRAFT: P&L Consistency Checks -->
+        <div class="chart-card full-width">
+            <h3>P&amp;L Consistency Checks</h3>
+            <p class="chart-subtitle">Automated validation of income statement and profitability metrics</p>
+            <div class="table-wrapper">
+                <table class="ranking-table" id="auditPLTable">
+                    <thead><tr><th>Check</th><th>Expected</th><th>Actual</th><th>Status</th></tr></thead>
+                    <tbody id="auditPLBody"></tbody>
                 </table>
             </div>
         </div>
